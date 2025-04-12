@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useFetch } from "@vueuse/core";
 import UserCard from "./components/UserCard.vue";
+import Toast from "./components/Toast.vue";
+import Loader from "./components/Loader.vue";
 
 const {
   isFetching,
+  isFinished,
   error,
   data: users,
   statusCode
@@ -11,6 +14,8 @@ const {
 </script>
 
 <template>
+  <Loader :loading="isFetching && !isFinished" />
+  <Toast :data="{ error, statusCode }" v-model="error" />
   <main class="w-full">
     <ul
       class="w-full flex flex-col gap-4 md:flex-row flex-wrap py-4 px-2 justify-center"

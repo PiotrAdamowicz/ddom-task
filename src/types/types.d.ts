@@ -23,3 +23,7 @@ export interface User {
   website: string;
   company: Company;
 }
+export interface Toast {
+  error?: string;
+  statusCode?: number | null;
+}
