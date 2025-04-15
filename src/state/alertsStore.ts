@@ -1,21 +1,27 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, type Ref } from "vue";
 
 export const useAlertsStore = defineStore("alerts", () => {
   const text = ref("");
   const status = ref(0);
   const showAlert = ref(false);
 
-  function setAlert(message: string, statusCode: number) {
-    showAlert.value = true;
-    text.value = message;
-    status.value = statusCode;
+  function setAlert(message: Ref<string>, statusCode: Ref<number>) {
+    text.value = message.value;
+    status.value = statusCode.value;
+    if (message.value) showAlert.value = true;
+  }
+  function clearAlert() {
+    showAlert.value = false;
+    text.value = "";
+    status.value = 0;
   }
 
   return {
     text,
     status,
     showAlert,
-    setAlert
+    setAlert,
+    clearAlert
   };
 });

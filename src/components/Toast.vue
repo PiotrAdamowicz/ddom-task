@@ -6,15 +6,14 @@ import type { Toast } from "../types/types";
 const store = useAlertsStore();
 
 const { data } = defineProps<{ data?: Toast }>();
-const show = ref(false);
 
-const resolvedStatusCode = computed(() => data.statusCode ?? store.status);
-const resolvedError = computed(() => data.error ?? store.text);
-const resolvedShow = computed(() => show.value ?? store.showAlert);
+const resolvedStatusCode = computed(() => data?.statusCode ?? store.status);
+const resolvedError = computed(() => data?.error ?? store.text);
+const show = computed(() => data?.error || store.showAlert);
 </script>
 <template>
   <div
-    v-if="resolvedShow"
+    v-if="show"
     class="absolute z-30 top-0 right-5 flex bg-red-500 text-bold rounded-md m-2"
   >
     <p
@@ -33,7 +32,7 @@ const resolvedShow = computed(() => show.value ?? store.showAlert);
       {{ resolvedError }}
     </p>
     <button
-      @click="resolvedShow = false"
+      @click="store.clearAlert()"
       class="font-semibold px-2 mx-2 cursor-pointer transition hover:text-zinc-700"
     >
       Close
