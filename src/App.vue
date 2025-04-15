@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { watch } from "vue";
 import { useFetch } from "@vueuse/core";
 import UserCard from "./components/UserCard.vue";
 import Toast from "./components/Toast.vue";
 import Loader from "./components/Loader.vue";
+import { useAlertsStore } from "./state/alertsStore.ts";
+
+const store = useAlertsStore();
 
 const {
   isFetching,
@@ -11,11 +15,17 @@ const {
   data: users,
   statusCode
 } = useFetch("https://jsonplaceholder.typicode.com/users").get().json();
+
+watch(error, (newError) => {
+  if (newError) {
+    store.setAlert(error, statusCode);
+  }
+});
 </script>
 
 <template>
   <Loader :loading="isFetching && !isFinished" />
-  <Toast :data="{ error, statusCode }" v-model="error" />
+  <Toast />
   <main class="w-full">
     <ul
       class="w-full flex flex-col gap-4 md:flex-row flex-wrap py-4 px-2 justify-center"

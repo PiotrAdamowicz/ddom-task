@@ -1,31 +1,39 @@
 <script lang="ts" setup>
+import { computed, ref } from "vue";
+import { useAlertsStore } from "../state/alertsStore.ts";
 import type { Toast } from "../types/types";
 
-const { data } = defineProps<{ data: Toast }>();
-const show = defineModel<boolean>();
+const store = useAlertsStore();
+
+const { data } = defineProps<{ data?: Toast }>();
+const show = ref(false);
+
+const resolvedStatusCode = computed(() => data.statusCode ?? store.status);
+const resolvedError = computed(() => data.error ?? store.text);
+const resolvedShow = computed(() => show.value ?? store.showAlert);
 </script>
 <template>
   <div
-    v-if="show"
+    v-if="resolvedShow"
     class="absolute z-30 top-0 right-5 flex bg-red-500 text-bold rounded-md m-2"
   >
     <p
-      v-if="(data.statusCode = 404)"
+      v-if="(resolvedStatusCode = 404)"
       class="text-white font-semibold px-2 py-2"
     >
-      Error {{ data.statusCode }} page not found
+      Error {{ resolvedStatusCode }} page not found
     </p>
     <p
-      v-else-if="(data.statusCode = 500)"
+      v-else-if="(resolvedStatusCode = 500)"
       class="text-white font-semibold px-2 py-2"
     >
-      Error {{ data.statusCode }} server error please try again
+      Error {{ resolvedStatusCode }} server error please try again
     </p>
-    <p v-else="data.error" class="text-white px-2 py-2">
-      {{ data.error }}
+    <p v-else="resolvedError" class="text-white px-2 py-2">
+      {{ resolvedError }}
     </p>
     <button
-      @click="show = false"
+      @click="resolvedShow = false"
       class="font-semibold px-2 mx-2 cursor-pointer transition hover:text-zinc-700"
     >
       Close
