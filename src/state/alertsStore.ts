@@ -3,10 +3,10 @@ import { ref, type Ref } from "vue";
 
 export const useAlertsStore = defineStore("alerts", () => {
   const text = ref("");
-  const status = ref(0);
+  const status = ref<number | null>(0);
   const showAlert = ref(false);
 
-  function setAlert(message: Ref<string>, statusCode: Ref<number>) {
+  function setAlert(message: Ref<string>, statusCode: Ref<number | null>) {
     text.value = message.value;
     status.value = statusCode.value;
     if (message.value) showAlert.value = true;
