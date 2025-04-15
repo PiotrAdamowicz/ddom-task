@@ -20,5 +20,4 @@ const { user } = defineProps<{ user: User }>();
     <p class="text-xs font-bold">City:</p>
     <p class="text-xs mx-2">{{ user.address.city }}</p>
   </span>
-  {{ console.log(user) }}
 </template>
